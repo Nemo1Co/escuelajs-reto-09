@@ -20,7 +20,7 @@ class MongoConnect {
           if (err) {
             reject(err);
           }
-          console.log('Connected succesfully to mongo');
+          console.log('Connected successfully to mongo');
           resolve(this.client.db(this.dbName));
         });
       });
