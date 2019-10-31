@@ -28,10 +28,33 @@ class MongoConnect {
     return MongoConnect.connection;
   }
 
-  getAll(collection) {
-    return this.connect().then(db => {
-      return db.collection(collection).find().toArray();
-    });
+  getAll(collection, query) {
+    return this.connect().then(db => db.collection(collection).find(query).toArray());
+  }
+
+  get(collection, id) {
+    return this.connect().then(db => db.collection(collection).findOne({ id: id }));
+  }
+
+  create(collection, data) {
+    return this.connect()
+      .then(db => db.collection(collection).insertOne(data))
+      .then(result => result.insertedId);
+  }
+
+  update(collection, id, data) {
+    return this.connect()
+      .then(db => db
+        .collection(collection)
+        .updateOne({ id: id }, { $set: data }, { upsert: true })
+      )
+      .then(result => result.upsertId || id);
+  }
+
+  delete(collection, id) {
+    return this.connect()
+      .then(db => db.collection(collection).deleteOne({ id: id }))
+      .then(() => id);
   }
 }
 

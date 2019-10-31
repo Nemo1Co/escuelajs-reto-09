@@ -19,12 +19,73 @@ const platziStore = (app) => {
   });
 
   router.get('/products', async (req, res, next) => {
-    const storeProducts = await productService.getProducts()
-    res.status(200).json(storeProducts);
+    const { tags } = req.query;
+    try {
+      const storeProducts = await productService.getProducts({ tags });
+      res.status(200).json(storeProducts);
+    }
+    catch (error) {
+      console.error('Error in GET "/products =>" ', error);
+      next();
+    }
   });
 
+  router.get('/products/:productId', async (req, res, next) => {
+		const { productId } = req.params;
+		try {
+      const storeProduct = await productService.getProduct({ productId });
+      if (storeProduct.length === 0) {
+        res.status(404).json(storeProduct);
+      }
+      else {
+        res.status(200).json(storeProduct);
+      }
+		}
+		catch (error) {
+      console.error('Error in GET "/products/:productId" => ', error);
+      next();
+		}
+  });
+  
+  router.post('/products', async (req, res, next) => {
+    const { body: product } = req;
+    try {
+      const createdProductId = await productService.createProduct({ product });
+			res.status(201).json(createdProductId);
+		}
+		catch (error) {
+			console.error('Error in POST "/products" => ', error);
+      next();
+		}
+	});
+
+	router.put('/products/:productId', async (req, res, next) => {    
+    const { productId } = req.params;
+    const { body: product } = req;
+    try {
+      const updatedProductId = await productService.updateProduct({ productId, product });
+			res.status(200).json(updatedProductId);
+		}
+		catch (error) {
+			console.error('Error in PUT "/products/:productId" => ', error);
+      next();
+		}
+	});
+
+	router.delete('/products/:productId', async (req, res, next) => {
+    const { productId } = req.params;
+    try {
+      const deletedProductId = await productService.deleteProduct({ productId });
+      res.status(200).json(deletedProductId);
+    }
+    catch (error) {
+      console.error('Error in DELETE "/products/:productId" => ', error);
+      next();
+    }
+	});
+
   router.get('*', (req, res) => {
-    res.status(404).send('Error 404');
+    res.status(404).json('Error 404');
   });
 }
 
