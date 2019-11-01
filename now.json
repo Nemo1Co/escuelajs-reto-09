@@ -1,0 +1,13 @@
+{
+  "name": "escjs2019-reto09",
+  "version": 2,
+  "builds": [{ "src": "src/index.js", "use": "@now/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
+  "env": {
+    "DB_USER": "@escjs2019_retos_db_user",
+    "DB_PASSWORD": "@escjs2019_retos_db_password",
+    "DB_HOST": "@escjs2019_retos_db_host",
+    "DB_NAME": "@escjs2019_retos_db_name"
+  },
+  "alias": ["https://escjs2019-reto09.nemo1co.now.sh", "nemo1co-reto09.now.sh"]
+}
