@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require("cors");
 const app = express();
 
 const { config } = require('./config');
 const platziStore = require('./routes')
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   let userInfo = req.header("user-agent");
